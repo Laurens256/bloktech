@@ -5,14 +5,30 @@
     font-family: -apple-system, Arial, Segoe UI, Roboto, Helvetica, BlinkMacSystemFont, sans-serif;
 }
 
+#startscherm {
+    display: inline;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: white;
+    /* z-index: 999; */
+    justify-content: center;
+}
+
+#startscherm.connected {
+    display: none;
+}
+
 #form {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     background: lightgray;
-    height: 3em;
-    padding: .25em;
+    height: 7.5vh;
+    padding: 1.25vh;
     display: flex;
 }
 
@@ -41,6 +57,11 @@
 #form > button:hover {
     transform: scale(1.03);
     cursor: pointer;
+}
+
+#messages {
+    height: 90vh;
+    overflow-y: scroll;
 }
 
 #messages > li { 
