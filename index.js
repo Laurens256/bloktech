@@ -7,7 +7,7 @@ const io = new Server(server);
 
 const { MongoClient } = require("mongodb");
 
-// map voor static files (stylesheet)
+// map voor static files (stylesheet etc)
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
