@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://cloud.mongodb.com/v2/61fab28aa47686421a7a50d4
+HostUrl=https://cloud.mongodb.com/nds/61fab28aa47686421a7a50d4/users/$external/CN%3Dcertificate/certs?monthsUntilExpiration=24
