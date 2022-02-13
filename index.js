@@ -6,8 +6,16 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const { MongoClient } = require("mongodb");
+//socket.io admin-ui
+const { instrument } = require("@socket.io/admin-ui")
+const cors = require("cors");
+app.use(cors({
+  origin: "https://admin.socket.io/"
+}));
+instrument(io, { auth: false });
 
+//database
+const { MongoClient } = require("mongodb");
 const uri = "mongodb+srv://Laurens256:TZg2qJ9Cdg5oC1iT@cluster0.acfzh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 
@@ -19,7 +27,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-
+//stuur/ontvang berichten
 io.on("connection", (socket) => {
   io.emit("chat message", "A user has connected");
     socket.on("chat message", (msg) => {
@@ -33,30 +41,30 @@ io.on("connection", (socket) => {
 });
 
 
+//voor users/namespaces, moet nog gemaakt worden
+// const userIo = io.of("/user");
+// userIo.on("connection", socket => {
+//   console.log("Connected to user namespace with username: " + socket.username);
+// });
 
-const userIo = io.of("/user");
-userIo.on("connection", socket => {
-  console.log("Connected to user namespace with username: " + socket.username);
-});
+// userIo.use((socket, next) => {
+//   if(socket.handshake.auth.token) {
+//     socket.username = getUserNameFromToken(socket.handshake.auth.token);
+//     next();
+//   } else {
+//     next(new Error("No token"))
+//   }
+// })
 
-userIo.use((socket, next) => {
-  if(socket.handshake.auth.token) {
-    socket.username = getUserNameFromToken(socket.handshake.auth.token);
-    next();
-  } else {
-    next(new Error("No token"))
-  }
-})
-
-function getUserNameFromToken(token) {
-  return token;
-}
+// function getUserNameFromToken(token) {
+//   return token;
+// }
 
 
+
+//laadt chat uit database
 async function loadChat() {
 // const uri = "mongodb+srv://Laurens256:TZg2qJ9Cdg5oC1iT@cluster0.acfzh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
-console.log("Chat geladen uit database");
 
 // const client = new MongoClient(uri);
 await client.connect();
@@ -75,11 +83,11 @@ await client.connect();
   //     console.log("Precieze tijd: " + chatResults.tijdVolledig);
   // });
 
-
 io.on("connection", (socket) => {
     chatResults.forEach((chatResults) => {
     socket.emit("chat message", chatResults.bericht);
     });
+    console.log("Chat geladen uit database");
 });
 
 
@@ -90,7 +98,7 @@ io.on("connection", (socket) => {
 loadChat();
 
 
-
+//verzameld alle data voor verzonden berichten
 async function processChat(msg) {
   // const uri = "mongodb+srv://Laurens256:TZg2qJ9Cdg5oC1iT@cluster0.acfzh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
@@ -119,7 +127,7 @@ async function processChat(msg) {
 }
 
 
-
+//slaat data verzonden berichten op in database
 async function saveChat (client, chatMsg) {
   const result = await client.db("chatlog").collection("fullChatLog").insertOne(chatMsg);
 

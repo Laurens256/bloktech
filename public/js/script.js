@@ -1,11 +1,11 @@
 const socket = io();
 
 //token voor account (toekomstig)
-const userSocket = io("http://localhost:3000/user");
+// const userSocket = io("http://localhost:3000/user");
 
-userSocket.on("connect_error", error => {
-    console.log(error)
-});
+// userSocket.on("connect_error", error => {
+//     console.log(error)
+// });
 
 const startScherm = document.querySelector("#startscherm");
 const messages = document.querySelector("#messages");
@@ -43,11 +43,6 @@ socket.on("chat message", function(msg) {
   messages.scrollTo(0, messages.scrollHeight);
 });
 
-
-
-// socket.on("berichten oud", function(msg_oud) {
-
-// });
 
 
 document.addEventListener("keydown", e => {
