@@ -1,3 +1,4 @@
 1.0.0: basis functionaliteit, chatten via localhost.
 1.1.0: mongodb database toegevoegd, chat inladen uit database.
 1.1.1: CORS toegevoegd voor socket.io admin -ui (dev).
+1.1.2: Mappenstructuur (tijdelijk) aangepast voor overzicht. Naam index.js -> server.js

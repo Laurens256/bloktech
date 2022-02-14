@@ -1,44 +1,35 @@
 const express = require("express");
 const app = express();
 
-const http = require("http");
-const server = http.createServer(app);
-const {
-    Server
-} = require("socket.io");
+const path = require("path");
+
+const server = require("http").createServer(app);
+const { Server } = require("socket.io");
 const io = new Server(server);
 
 //socket.io admin-ui
-const {
-    instrument
-} = require("@socket.io/admin-ui")
+const { instrument } = require("@socket.io/admin-ui")
 const cors = require("cors");
-app.use(cors({
-    origin: "https://admin.socket.io/"
-}));
-instrument(io, {
-    auth: false
-});
+app.use(cors({ origin: "https://admin.socket.io/" }));
+instrument(io, {auth: false});
 
 //database
-const {
-    MongoClient
-} = require("mongodb");
+const { MongoClient } = require("mongodb");
 const credentials = "X509-cert.pem"
 const client = new MongoClient("mongodb+srv://cluster0.acfzh.mongodb.net/myFirstDatabase?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority", {
     sslKey: credentials,
     sslCert: credentials
 });
 
-
-
 // map voor static files (stylesheet etc)
-const path = require("path")
-app.use("/public", express.static(path.join(__dirname, "/public")))
+// app.use("/public", express.static(path.join(__dirname, "/public")))
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/public/index.html");
 });
+
+
 
 //stuur/ontvang berichten
 io.on("connection", (socket) => {
@@ -54,33 +45,13 @@ io.on("connection", (socket) => {
 });
 
 
-//voor users/namespaces, moet nog gemaakt worden
-// const userIo = io.of("/user");
-// userIo.on("connection", socket => {
-//   console.log("Connected to user namespace with username: " + socket.username);
-// });
-
-// userIo.use((socket, next) => {
-//   if(socket.handshake.auth.token) {
-//     socket.username = getUserNameFromToken(socket.handshake.auth.token);
-//     next();
-//   } else {
-//     next(new Error("No token"))
-//   }
-// })
-
-// function getUserNameFromToken(token) {
-//   return token;
-// }
 
 //laadt chat uit database
 async function loadChat() {
     await client.connect();
-
     const cursor = client.db("chatlog").collection("fullChatLog")
         .find().limit(20);
     const chatResults = await cursor.toArray();
-
     //   chatResults.forEach((chatResults, i) => {
     //     console.log();
     //     console.log(i + 1 + ". Naam: " + chatResults.naam);
@@ -90,7 +61,7 @@ async function loadChat() {
     //     console.log("Tijdstip: " + chatResults.tijd);
     //     console.log("Precieze tijd: " + chatResults.tijdVolledig);
     // });
-
+    
     io.on("connection", (socket) => {
         chatResults.forEach((chatResults) => {
             socket.emit("chat message", chatResults.bericht);
@@ -133,7 +104,6 @@ async function processChat(msg) {
 //slaat data verzonden berichten op in database
 async function saveChat(client, chatMsg) {
     const result = await client.db("chatlog").collection("fullChatLog").insertOne(chatMsg);
-
     console.log("Bericht opgeslagen met id: " + result.insertedId);
 }
 
