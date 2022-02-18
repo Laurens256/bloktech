@@ -7,8 +7,8 @@ const input = document.querySelector("#input");
 
 let chatsList = document.querySelector("#chatlijst");
 
-const username = prompt("Please enter your username");
-const userPassword = prompt("Please enter your password");
+// const username = prompt("Please enter your username");
+// const userPassword = prompt("Please enter your password");
 
 function chatLijst () {
   const chatsListItem = document.createElement("li");
