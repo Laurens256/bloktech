@@ -3,3 +3,5 @@
 1.1.1: CORS toegevoegd voor socket.io admin -ui (dev).
 1.1.2: Mappenstructuur (tijdelijk) aangepast voor overzicht. Naam index.js -> server.js
 2.0.0: Mappenstructuur helemaal aangepast. Socket en Database hebben aparte files
+2.1.0: Handlebars integratie
+2.1.1: Aparte js file voor tijd gerelateerde events

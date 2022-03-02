@@ -5,6 +5,14 @@
     font-family: -apple-system, Arial, Segoe UI, Roboto, Helvetica, BlinkMacSystemFont, sans-serif;
 }
 
+:root {
+    --achtergrond: #fff;
+    --tekst: #000;
+    --tekstalt: #fff;
+    --back: #000;
+    --formachtergrond: #D3D3D3;
+}
+
 #startscherm {
     display: inline;
     position: fixed;
@@ -12,7 +20,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: white;
+    background: var(--achtergrond);
     /* z-index: 999; */
     justify-content: center;
 }
@@ -29,9 +37,11 @@
 }
 
 #chatlijstcontainer {
+    background: var(--achtergrond);
+    overflow-x: hidden;
     width: 30%;
     height: 100%;
-    border-right: black solid 2px;
+    border-right: var(--tekst) solid 2px;
     position: absolute;
     left: 0;
     z-index: 10;
@@ -62,10 +72,10 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    background: lightgray;
-    height: 7.5vh;
+    background: var(--formachtergrond);
+    height: 2.75em;
     width: 98%;
-    padding: 1%;
+    padding: .5em;
     display: flex;
 }
 
@@ -88,7 +98,7 @@
     margin: 0.25em; 
     border-radius: .2em; 
     outline: none; 
-    color: white; 
+    color: var(--tekstalt); 
 }
 
 #form > button:hover {
@@ -97,13 +107,74 @@
 }
 
 #messages {
-    height: 90vh;
+    height: calc(100% - 7.75em);   /* som van header en form + padding */
     overflow-y: auto;
 }
 
-#messages > li { 
+#messages > li {
+    position: relative;
+    font-size: 1rem;
     padding: 0.5em 1em;
 }
 #messages > li:nth-child(odd) { 
     background: #efefef;
+}
+
+#messages > li small {
+    position: absolute;
+    right: .5em;
+    bottom: .1em;
+    font-size: .7rem;
+}
+
+
+
+#messageheader {
+    height: 4em;
+    background: var(--achtergrond);
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#messageheader h1 {
+    font-weight: normal;
+    font-size: 1.5rem;
+    margin-left: 3.5em;
+}
+
+#messageheader svg {
+    display: none;
+}
+
+/*****************************
+mobile styles, media query   
+*****************************/
+@media only screen and (max-width: 768px) {
+    #chatcontainer {
+        width: 100%;
+        top: 0;
+        bottom: 0;
+    }
+    #chatlijstcontainer {
+        width: 0%;
+        background: var(--achtergrond);
+        transition: all .3s;
+        border: none;
+    }
+    #chatlijstcontainer.active {
+        width: 100%;
+    }
+    #messages li {
+        font-size: 1.1rem;
+    }
+
+    #messageheader h1 {
+        margin-left: .5em;
+    }
+
+    #messageheader svg {
+        display: inline;
+        width: 3em;
+    }
 }
