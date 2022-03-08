@@ -13,14 +13,17 @@ const cors = require("cors");
 app.use(cors({ origin: "https://admin.socket.io/" }));
 instrument(io, { auth: false });
 
-const { formatMessage } = require("./utils/messages.js");
+const bodyParser = require("body-parser")
 
-// const {
-//   userJoin,
-//   getCurrentUser,
-//   userLeave,
-//   getRoomUsers,
-// } = require("./utils/users.js");
+const { formatMessage } = require("./utils/io/messages.js");
+
+let username = "ja";
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+} = require("./utils/io/users.js");
 
 const exphbs = require("express-handlebars");
 app.engine(
@@ -31,15 +34,35 @@ app.engine(
   })
 );
 
+// app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/', (req, res) => {
+  console.log(req.body);
+  // userJoin(req.body, socket.id);
+  username = req.body;
+  console.log(username + " server.js");
+});
+
 app.set("view engine", "hbs");
 
 app.get("/", (req, res) => {
+  res.render("form");
+});
+
+app.get("/messages", (req, res) => {
+  console.log(req.query.user);
   res.render("chat");
+});
+
+app.post("/messages", (req, res) => {
+  console.log(req.body);
+  res.redirect("/messages?user=" + req.body.username)
 });
 
 const path = require("path");
 
-const { loadChat, saveChat } = require("./db/db_chat.js");
+const { loadChat, saveChat } = require("./db/mongodb.js");
 
 loadChat(io);
 
@@ -47,10 +70,11 @@ loadChat(io);
 app.use(express.static(path.join(__dirname, "public")));
 
 io.on("connection", (socket) => {
-  io.emit("chat message", formatMessage("Server", "A user has connected"));
+  socket.on("new user", (username) => {
+    // userJoin(username, socket.id);
+  });
   socket.on("chat message", (msg) => {
     io.emit("chat message", formatMessage("testnaam", msg));
-    // io.emit("chat message", formatMessage("testnaam", msg));
     saveChat(formatMessage("testnaam", msg));
   });
   socket.on("disconnect", () => {
@@ -58,8 +82,6 @@ io.on("connection", (socket) => {
     io.emit("chat message", formatMessage("Server", "A user has disconnected"));
   });
 });
-
-// console.log(formatMessage("John", "hfajfsh"));
 
 server.listen(port, () => {
   console.log("listening on: *" + port);

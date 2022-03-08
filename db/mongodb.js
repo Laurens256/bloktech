@@ -14,8 +14,10 @@ const loadChat = async function (io) {
     .db("chatlog")
     .collection("fullChatLog")
     .find()
+    .sort({ tijdVolledig: -1 })
     .limit(20);
   const chatResults = await cursor.toArray();
+
   //   chatResults.forEach((chatResults, i) => {
   //     console.log();
   //     console.log(i + 1 + ". Naam: " + chatResults.naam);
@@ -27,9 +29,22 @@ const loadChat = async function (io) {
   // });
 
   io.on("connection", (socket) => {
-    chatResults.forEach((chatResults) => {
-      socket.emit("chat message", chatResults);
-    });
+    // const chatResultsDisplay = chatResults.slice().reverse();
+
+    //     for(let i=0; i<chatResultsDisplay.length; i++) {
+
+    //       //check of er een niewe dag zit tussen berichten. Code voor later
+    //       if(chatResultsDisplay[i].tijdVolledig.substring(6,8) !== chatResultsDisplay[i+1].tijdVolledig.substring(6,8)) {
+    //         //niewe dag
+    //       }
+    //     }
+
+    chatResults
+      .slice()
+      .reverse()
+      .forEach((chatResults) => {
+        socket.emit("chat message", chatResults);
+      });
     console.log("Chat geladen uit database");
   });
   // database legen
