@@ -31,8 +31,9 @@
 
 #chatcontainer {
     width: 70%;
-    height: 100%;
     position: absolute;
+    top: 0;
+    bottom: 0;
     right: 0;
 }
 
@@ -70,7 +71,7 @@
 
 #form {
     position: absolute;
-    bottom: 0;
+    /* bottom: 0; */
     right: 0;
     background: var(--formachtergrond);
     height: 2.75em;
@@ -146,6 +147,20 @@
 #messageheader svg {
     display: none;
 }
+
+
+
+/*****************************
+Login page 
+*****************************/
+#loginpage {
+    background: white;
+    width: 100em;
+    height: 100em;
+    position: fixed;
+    z-index: 999;
+}
+
 
 /*****************************
 mobile styles, media query   
