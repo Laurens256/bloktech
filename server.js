@@ -13,17 +13,19 @@ const cors = require("cors");
 app.use(cors({ origin: "https://admin.socket.io/" }));
 instrument(io, { auth: false });
 
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+
+const { loadChat, saveChat } = require("./db/mongodb.js");
+// loadChat(io);
 
 const { formatMessage } = require("./utils/io/messages.js");
 
-let username = "ja";
 const {
   userJoin,
   getCurrentUser,
   userLeave,
-  getRoomUsers,
-} = require("./utils/io/users.js");
+  getRoomUsers
+} = require("./utils/io/users");
 
 const exphbs = require("express-handlebars");
 app.engine(
@@ -37,13 +39,6 @@ app.engine(
 // app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/', (req, res) => {
-  console.log(req.body);
-  // userJoin(req.body, socket.id);
-  username = req.body;
-  console.log(username + " server.js");
-});
-
 app.set("view engine", "hbs");
 
 app.get("/", (req, res) => {
@@ -51,37 +46,69 @@ app.get("/", (req, res) => {
 });
 
 app.get("/messages", (req, res) => {
-  console.log(req.query.user);
   res.render("chat");
 });
 
 app.post("/messages", (req, res) => {
-  console.log(req.body);
-  res.redirect("/messages?user=" + req.body.username)
+  res.redirect("/messages?username=" + req.body.username+"&room="+req.body.room)
 });
-
-const path = require("path");
-
-const { loadChat, saveChat } = require("./db/mongodb.js");
-
-loadChat(io);
 
 // map voor static files (stylesheet etc)
+const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 
-io.on("connection", (socket) => {
-  socket.on("new user", (username) => {
-    // userJoin(username, socket.id);
+
+
+io.on("connect", (socket) => {
+  socket.on("joinRoom", ({username, room}) => {
+    console.log("room joined server.js")
+    const user = userJoin(socket.id, username, room);
+
+    socket.join(user.room);
+
+    loadChat(user.room, socket);
+
+    socket.broadcast
+    .to(user.room)
+    .emit("systemMessage", formatMessage("Server", user.username+ " has joined the chat"));
+
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      });
+
+  // Listen for chatMessage
+  socket.on("message", msg => {
+    const user = getCurrentUser(socket.id);
+
+    io.to(user.room).emit("message", formatMessage(user, msg));
+
+    saveChat(formatMessage(user, msg));
   });
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", formatMessage("testnaam", msg));
-    saveChat(formatMessage("testnaam", msg));
-  });
+
+  // Runs when client disconnects
   socket.on("disconnect", () => {
-    console.log("a user disconnected");
-    io.emit("chat message", formatMessage("Server", "A user has disconnected"));
+    const user = userLeave(socket.id);
+  
+    if (user) {
+      io.to(user.room).emit(
+        "systemMessage",
+        formatMessage("Server", user.username + "has left the chat")
+      );
+  
+      // Send users and room info
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      });
+    }
+  });
   });
 });
+
+
+
+
 
 server.listen(port, () => {
   console.log("listening on: *" + port);

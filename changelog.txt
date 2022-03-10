@@ -5,3 +5,5 @@
 2.0.0: Mappenstructuur helemaal aangepast. Socket en Database hebben aparte files
 2.1.0: Handlebars integratie
 2.1.1: Aparte js file voor tijd gerelateerde events
+2.1.2: "Login" form toegevoegd
+3.0.0: Aparte rooms met database collections toegevoegd, login form aangepast.

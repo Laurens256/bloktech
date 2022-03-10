@@ -10,7 +10,7 @@ const messageForm = document.querySelector("#form");
 const input = document.querySelector("#input");
 let allMessages = document.querySelector("#messages li");
 
-let chatsList = document.querySelector("#chatlijst");
+const chatsList = document.querySelector("aside ul:first-of-type");
 
 const chatBackButton = document.querySelector("#chatbackbutton");
 const asideElement = document.querySelector("#chatlijstcontainer");
@@ -24,33 +24,26 @@ if((window.location.href.indexOf("messages") < 1)) {
 
 if((window.location.href.indexOf("messages") > -1)) {
 
+  const { username, room } = Qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+
+  socket.emit("joinRoom", { username, room });
+
   function chatLijst () {
     const chatsListItem = document.createElement("li");
     chatsListItem.innerHTML = "<strong>"+"Naam"+"</strong><span>"+"Bericht!"+"</span>";
     chatsList.appendChild(chatsListItem);
   }
-  
+
   // regelt input van form(tekstbox)
   messageForm.addEventListener("submit", function(e) {
     e.preventDefault();
     if (input.value) {
-      socket.emit("chat message", input.value);
+      socket.emit("message", input.value);
       input.value = "";
     }
   });
-  
-  
-  
-  //laadscherm
-  // socket.on("connect", () => {
-  //   loadScreen.classList.add("connected");
-  //   input.placeholder = "";
-  // })
-  
-  // socket.on("disconnect", () => {
-  //   loadScreen.classList.remove("connected");
-  //   input.placeholder = "Berichten worden automatisch verzonden wanneer je online bent";
-  // })
   
   
   //mobile aside (chatlijst) tonen
@@ -60,21 +53,22 @@ if((window.location.href.indexOf("messages") > -1)) {
   
   
   //display berichten
-  socket.on("chat message", function(msg) {
+  socket.on("message", function(msg) {
     const liMessage = document.createElement("li");
-    liMessage.innerHTML = msg.bericht+"<small>"+msg.time+"</small>";
+    liMessage.innerHTML = "<div><strong>"+msg.naam+"</strong><small>"+msg.time+"</small></div>"+msg.bericht;
+    messages.appendChild(liMessage);
+    messages.scrollTo(0, messages.scrollHeight);
+  });
+
+  //nog ff aparte styling voor systeembericht maken
+  socket.on("systemMessage", function(msg) {
+    const liMessage = document.createElement("li");
+    liMessage.innerHTML = "<div><strong>"+msg.naam+"</strong><small>"+msg.time+"</small></div>"+msg.bericht;
     messages.appendChild(liMessage);
     messages.scrollTo(0, messages.scrollHeight);
   });
   
-  socket.on("new user", function(msg) {
-    const liMessage = document.createElement("li");
-    liMessage.innerHTML = msg.bericht;
-    messages.appendChild(liMessage);
-    messages.scrollTo(0, messages.scrollHeight);
-  });
-  
-  
+
   
   document.addEventListener("keydown", e => {
     if (e.target.matches("input")) return;

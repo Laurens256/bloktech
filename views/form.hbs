@@ -1,6 +1,13 @@
     <form action="/messages" method="POST" id="loginform">
+    <label for="Naam">Naam</label>
         <input name="username" type="text" placeholder="username" autocomplete="off" required>
+
+        <label for="Room">Room</label>
+          <select name="room" id="cars">
+        <option value="valorant">Valorant</option>
+        <option value="minecraft">Minecraft</option>
+        <option value="pvz">Plants vs Zombies</option>
+        <option value="brawlhalla">Brawlhalla</option>
+  </select>
         <input type="submit" value="Submit">
     </form>
-
-    <a href="/messages">Chat</a>

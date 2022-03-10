@@ -37,7 +37,7 @@
     right: 0;
 }
 
-#chatlijstcontainer {
+aside {
     background: var(--achtergrond);
     overflow-x: hidden;
     width: 30%;
@@ -48,25 +48,32 @@
     z-index: 10;
 }
 
-#chatlijst {
+aside ul:first-of-type {
     width: 100%;
-    height: 100%;
+    height: 50%;
     overflow-y: auto;
 }
 
-#chatlijst li {
+aside ul:first-of-type li {
     padding: 2em;
     border-bottom: solid 1px grey;
     transition: all .15s;
     cursor: pointer;
 }
 
-#chatlijst li:hover {
+aside ul:first-of-type li:hover {
     background-color: #eee;
 }
 
-#chatlijst li span {
+aside ul:first-of-type li span {
     display: block;
+}
+
+aside ul:last-of-type {
+    width: 100%;
+    height: calc(50% - 3px);
+    overflow-y: auto;
+    border-top: black 3px solid;
 }
 
 #form {
@@ -117,14 +124,21 @@
     font-size: 1rem;
     padding: 0.5em 1em;
 }
+
 #messages > li:nth-child(odd) { 
     background: #efefef;
 }
 
-#messages > li small {
-    position: absolute;
-    right: .5em;
-    bottom: .1em;
+#messages > li div {
+    display: flex;
+    gap: .5em;
+}
+
+#messages > li div strong {
+    font-size: .8rem;
+}
+
+#messages > li div small {
     font-size: .7rem;
 }
 
@@ -153,13 +167,10 @@
 /*****************************
 Login page 
 *****************************/
-#loginpage {
-    background: white;
-    width: 100em;
-    height: 100em;
-    position: fixed;
-    z-index: 999;
+#loginform label {
+    display: block;
 }
+
 
 
 /*****************************
@@ -171,13 +182,13 @@ mobile styles, media query
         top: 0;
         bottom: 0;
     }
-    #chatlijstcontainer {
+    aside {
         width: 0%;
         background: var(--achtergrond);
         transition: all .3s;
         border: none;
     }
-    #chatlijstcontainer.active {
+    aside.active {
         width: 100%;
     }
     #messages li {

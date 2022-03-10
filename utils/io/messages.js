@@ -1,10 +1,11 @@
 const { getAllDate } = require("./timeCheck.js");
 
-function formatMessage(username, msg) {
+function formatMessage(user, msg) {
   const allDate = getAllDate();
   return {
-    naam: username,
+    naam: user.username || "Server",
     bericht: msg,
+    room: user.room,
     time: allDate.hour + ":" + allDate.minute,
     tijdVolledig:
       allDate.year +
