@@ -1,3 +1,5 @@
+console.log("script.js geladen");
+
 const socket = io();
 
 const loginScreen = document.querySelector("#loginform");
