@@ -16,7 +16,6 @@ instrument(io, { auth: false });
 const bodyParser = require("body-parser");
 
 const { loadChat, saveChat } = require("./db/mongodb.js");
-// loadChat(io);
 
 const { formatMessage } = require("./utils/io/messages.js");
 
@@ -46,11 +45,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/messages", (req, res) => {
-  res.render("chat");
+  res.render("chat", {
+    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1)
+  });
 });
 
 app.post("/messages", (req, res) => {
-  res.redirect("/messages?username=" + req.body.username+"&room="+req.body.room)
+  res.redirect("/messages?username=" + req.body.username+"&room="+req.body.room);
 });
 
 // map voor static files (stylesheet etc)
@@ -61,7 +62,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 io.on("connect", (socket) => {
   socket.on("joinRoom", ({username, room}) => {
-    console.log("room joined server.js")
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
@@ -72,10 +72,7 @@ io.on("connect", (socket) => {
     .to(user.room)
     .emit("systemMessage", formatMessage("Server", user.username+ " has joined the chat"));
 
-      io.to(user.room).emit("roomUsers", {
-        room: user.room,
-        users: getRoomUsers(user.room)
-      });
+    io.to(user.room).emit("updateusers", getRoomUsers(user.room));
 
   // Listen for chatMessage
   socket.on("message", msg => {
@@ -93,14 +90,11 @@ io.on("connect", (socket) => {
     if (user) {
       io.to(user.room).emit(
         "systemMessage",
-        formatMessage("Server", user.username + "has left the chat")
+        formatMessage("Server", user.username + " has left the chat")
       );
   
       // Send users and room info
-      io.to(user.room).emit("roomUsers", {
-        room: user.room,
-        users: getRoomUsers(user.room)
-      });
+      io.to(user.room).emit("updateusers", getRoomUsers(user.room));
     }
   });
   });

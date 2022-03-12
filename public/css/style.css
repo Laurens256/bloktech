@@ -76,6 +76,15 @@ aside ul:last-of-type {
     border-top: black 3px solid;
 }
 
+aside ul:last-of-type li {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 2em);
+    height: 2em;
+    border-bottom: 1px black solid;
+    padding: 1em;
+}
+
 #form {
     position: absolute;
     /* bottom: 0; */
