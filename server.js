@@ -13,7 +13,8 @@ const io = new Server(server);
 // socket.io admin-ui
 const { instrument } = require("@socket.io/admin-ui");
 const cors = require("cors");
-app.use(cors({ origin: "https://admin.socket.io/" }));
+// app.use(cors({ origin: "https://admin.socket.io/" }));
+app.use(cors({ origin: "*" }));
 instrument(io, { auth: false });
 
 const bodyParser = require("body-parser");
@@ -37,6 +38,12 @@ app.engine(
     extname: ".hbs",
   })
 );
+
+// const authRoutes = require("./routes/auth");
+// const managerRoutes = require("./routes/manager");
+// const leadRoutes = require("./routes/lead");
+// const resourceRoutes = require("./routes/resource");
+
 
 // app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));

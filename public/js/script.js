@@ -1,6 +1,6 @@
 console.log("script.js geladen");
 
-const socket = io(window.location.origin);
+const socket = io();
 
 const loginScreen = document.querySelector("#loginform");
 const loginSubmit = document.querySelector("#loginform input[type=submit]");
