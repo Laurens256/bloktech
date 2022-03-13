@@ -11,11 +11,13 @@ let deleteButtons = [];
 const messageForm = document.querySelector("#form");
 const messageInput = document.querySelector("#input");
 
-const chatsList = document.querySelector("aside ul:first-of-type");
+// const chatsList = document.querySelector("aside ul:first-of-type");
 const usersList = document.querySelector("aside ul:last-of-type");
 
+const roomsList = document.querySelectorAll("aside ul:first-of-type li a");
+
 const chatBackButton = document.querySelector("#chatbackbutton");
-const asideElement = document.querySelector("#chatlijstcontainer");
+const asideElement = document.querySelector("aside");
 
 if ((window.location.href.indexOf("messages") < 1)) {
   loginSubmit.addEventListener("click", function (e) {
@@ -31,12 +33,6 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
   socket.emit("joinRoom", { username, room });
 
-  function chatLijst() {
-    const chatsListItem = document.createElement("li");
-    chatsListItem.innerHTML = "<strong>" + "Naam" + "</strong><span>" + "Bericht!" + "</span>";
-    chatsList.appendChild(chatsListItem);
-  }
-
   // regelt input van form(tekstbox)
   messageForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -50,6 +46,25 @@ if ((window.location.href.indexOf("messages") > -1)) {
   //mobile aside (chatlijst) tonen
   function mobileAside() {
     asideElement.classList.add("active");
+  }
+
+
+  const changeRoom = (e) => {
+    window.location.href = "/messages?username="+username+"&room="+e.target.id;
+  }
+
+
+  const deleteMsg = (e) => {
+    const liDelete = e.currentTarget.parentNode;
+    const naamDelete = liDelete.querySelector("div strong");
+    const berichtDelete = liDelete.querySelector("p");
+
+    naamDelete.textContent = "Verwijderd";
+    berichtDelete.textContent = "Bericht wordt verwijderd...";
+
+    console.log(liDelete);
+
+    socket.emit("deleteMsg", room, liDelete.id, liDelete);
   }
 
 
@@ -81,22 +96,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
 
 
-  const deleteMsg = (e) => {
-    const liDelete = e.currentTarget.parentNode;
-    const naamDelete = liDelete.querySelector("div strong");
-    const berichtDelete = liDelete.querySelector("p");
-
-    naamDelete.textContent = "Verwijderd";
-    berichtDelete.textContent = "Bericht wordt verwijderd...";
-
-    socket.emit("deleteMsg", room, liDelete.id, liDelete);
-  }
-
-
-
-
-
-  //display server berichten // nog ff aparte styling voor systeembericht maken
+  //display server berichten
   socket.on("systemMessage", function (msg) {
     const liMessage = document.createElement("li");
     liMessage.classList.add("servermsg");
@@ -128,16 +128,19 @@ if ((window.location.href.indexOf("messages") > -1)) {
   })
 
 
-  // document.addEventListener("keydown", e => {
-  //   if (e.target.matches("messageInput")) return;
+  document.addEventListener("keydown", e => {
+    if (e.target.matches("messageInput")) return;
 
-  //   if(e.key === "c") socket.connect();
+    if(e.key === "c") socket.connect();
 
-  //   if(e.key === "d") socket.disconnect();
-  //   }
-  // )
+    if(e.key === "d") socket.disconnect();
+    }
+  )
+
+  for (let i = 0; i < roomsList.length; i++) {
+    roomsList[i].addEventListener("click", changeRoom);
+  }
 
   chatBackButton.addEventListener("click", mobileAside);
-  // document.addEventListener("click", chatLijst);
 
 }

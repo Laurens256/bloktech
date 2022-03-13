@@ -12,12 +12,15 @@ const cors = require("cors");
 app.use(cors({ origin: "*" }));
 instrument(io, { auth: false });
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const bodyParser = require("body-parser");
 
 const {
   loadChat,
   saveChat,
-  deleteChat
+  deleteChat,
 } = require("./db/mongodb.js");
 
 const { formatMessage } = require("./utils/io/messages.js");
@@ -43,18 +46,14 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-// app.use("/", require("./routes/roomselect"));
+app.use("/", require("./routes/roomselect"));
 // app.use("/messages", require("./routes/chat"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.render("form");
-});
-
 app.get("/messages", (req, res) => {
   res.render("chat", {
-    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1)
+    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1),
   });
 });
 
@@ -80,16 +79,20 @@ io.on("connect", (socket) => {
 
     // Listen for chatMessage
     socket.on("message", msg => {
-      const user = getCurrentUser(socket.id);
+      const getMsgId = async function () {
+        const user = getCurrentUser(socket.id);
 
-      io.to(user.room).emit("message", formatMessage(user, msg));
+        const fullMsg = formatMessage(user, msg)
+        const fullMsgId = await saveChat(fullMsg);
 
-      saveChat(formatMessage(user, msg));
+        io.to(user.room).emit("message", fullMsgId);
+      }
+      getMsgId(msg);
     });
 
     socket.on("deleteMsg", (room, messageId) => {
-      io.to(user.room).emit("deleteMsgGlobal", messageId);
       deleteChat(room, messageId);
+      io.to(user.room).emit("deleteMsgGlobal", messageId);
     })
 
     // Runs when client disconnects

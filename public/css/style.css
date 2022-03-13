@@ -55,13 +55,24 @@ aside ul:first-of-type {
 }
 
 aside ul:first-of-type li {
-    padding: 2em;
+    display: inline-block;
     border-bottom: solid 1px grey;
     transition: all .15s;
     cursor: pointer;
+    width: 100%;
+    text-align: center;
 }
 
-aside ul:first-of-type li:hover {
+aside ul:first-of-type li a {
+    padding: 2em 0;
+    display: block;
+    height: 1em;
+    text-decoration: none;
+    color: black;
+}
+
+aside ul:first-of-type li:hover,
+aside ul:first-of-type li:focus-within {
     background-color: #eee;
 }
 
@@ -124,7 +135,7 @@ aside ul:last-of-type li {
 }
 
 #messages {
-    height: calc(100% - 7.75em);   /* som van header en form + padding */
+    height: calc(100% - 7.75em - 1px);   /* som van header en form + padding + header border */
     width: calc(100% - 2em);
     padding: 0 1em;
     overflow-y: auto;
@@ -160,6 +171,10 @@ aside ul:last-of-type li {
 
 #messages > li.servermsg div {
     justify-content: center;
+}
+
+#messages > li:first-of-type {
+    margin-top: 1em;
 }
 
 #messages > li:last-of-type {
@@ -213,12 +228,13 @@ aside ul:last-of-type li {
     width: 100%;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid black;
 }
 
 #messageheader h1 {
     font-weight: normal;
     font-size: 1.5rem;
-    margin-left: 3.5em;
+    margin-left: 1em;
 }
 
 #messageheader svg {

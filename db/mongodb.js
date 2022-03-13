@@ -49,6 +49,7 @@ const saveChat = async function (msgMetaData) {
       .collection(msgMetaData.room)
       .insertOne(msgMetaData);
     console.log("Bericht opgeslagen met id: " + result.insertedId);
+    return(msgMetaData);
   } catch (e) {
     console.error(e);
   } finally {
@@ -57,7 +58,6 @@ const saveChat = async function (msgMetaData) {
 };
 
 const deleteChat = async function (room, messageId) {
-  // console.log(messageId);
   try {
     await client.connect();
     await client
