@@ -43,10 +43,14 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-app.use("/", require("./routes/roomselect"));
+// app.use("/", require("./routes/roomselect"));
 // app.use("/messages", require("./routes/chat"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.render("form");
+});
 
 app.get("/messages", (req, res) => {
   res.render("chat", {
