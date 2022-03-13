@@ -1,17 +1,16 @@
 # Blok tech chat feature
-
-Dit project is onderdeel van een matching-applicatie die uiteindelijk gevormd gaat worden. Het onderdeel wat ik maak is een chat-functie. Dit doe ik door middel van de Socket.io module voor Express.
+This project is part of a matching application that is soon to be completed. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express.
 
 ---
-## Requirements
-
-For development, you will only need Node.js and a node global package, Yarn, installed in your environement.
+## Requirements (optimal)
+- Npm 8.3.1 or higher
+- Node 17.4.0 or higher
 
 ### Node
 - #### Node installation on Windows
 
-  Just go on [official Node.js website](https://nodejs.org/) and download the installer.
-Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
+Go to the [official Node.js website](https://nodejs.org/) and download the installer.
+Make sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
 
 - #### Node installation on Ubuntu
 
@@ -26,30 +25,25 @@ Also, be sure to have `git` available in your PATH, `npm` might need it (You can
 If the installation was successful, you should be able to run the following command.
 
     $ node --version
-    v8.11.3
 
     $ npm --version
-    6.1.0
-
-If you need to update `npm`, you can make it using `npm`! Cool right? After running the following command, just open again the command line and be happy.
-
-    $ npm install npm -g
 
 ## Install
 
     $ git clone https://github.com/Laurens256/bloktech
     $ cd bloktech
-    $ yarn install
+    $ npm install
 
-## Configure app
 
-Open `a/nice/path/to/a.file` then edit it with your settings. You will need:
+## Setting up .env
+```
+DB_USERNAME=[youeDatabaseUsername]
+DB_PASSWORD=[yourPassword]
+```
 
-- A setting;
-- Another setting;
-- One more setting;
 
 ## Running the project
+To run the project you can either use `node server.js` or `nodemon server.js` where the latter is preferred for development purposes.
 
-    Start de server met nodemon: nodemon server.js
-    Start de server: node server.js
+## Sources
+- [Readme template](https://gist.github.com/Igormandello/57d57ee9a9f32a5414009cbe191db432)
