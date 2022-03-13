@@ -9,3 +9,4 @@
 3.0.0: Aparte rooms met database collections toegevoegd, login form aangepast.
 3.1.0: Delete button voor berichten van jezelf en styles voor je eigen berichten. Routes folder nog niet helemaal werkend.
 3.1.1: Volgorde van chat opslaan en output omgewisseld. Verbeterd delete button, misschien nog aanpassen in de toekomst
+3.1.2: Bug fixes

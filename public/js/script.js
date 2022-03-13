@@ -62,8 +62,6 @@ if ((window.location.href.indexOf("messages") > -1)) {
     naamDelete.textContent = "Verwijderd";
     berichtDelete.textContent = "Bericht wordt verwijderd...";
 
-    console.log(liDelete);
-
     socket.emit("deleteMsg", room, liDelete.id, liDelete);
   }
 
@@ -118,7 +116,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
   //check of gebruiker connected blijft
   socket.on("disconnect", () => {
-
+    messageInput.setAttribute("placeholder", "Je bent niet verbonden");
   });
 
   //verwijder bericht globaal
@@ -128,14 +126,14 @@ if ((window.location.href.indexOf("messages") > -1)) {
   })
 
 
-  document.addEventListener("keydown", e => {
-    if (e.target.matches("messageInput")) return;
+  // document.addEventListener("keydown", e => {
+  //   if (e.target.matches("messageInput")) return;
 
-    if(e.key === "c") socket.connect();
+  //   if(e.key === "c") socket.connect();
 
-    if(e.key === "d") socket.disconnect();
-    }
-  )
+  //   if(e.key === "d") socket.disconnect();
+  //   }
+  // )
 
   for (let i = 0; i < roomsList.length; i++) {
     roomsList[i].addEventListener("click", changeRoom);

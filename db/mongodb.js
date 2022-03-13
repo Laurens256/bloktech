@@ -26,19 +26,6 @@ const loadChat = async function (room, socket) {
   });
   console.log("Chat geladen uit database");
 
-  //   chatResults.forEach((chatResults, i) => {
-  //     console.log();
-  //     console.log(i + 1 + ". Naam: " + chatResults.naam);
-  //     console.log(i + 1 + ". Naam: " + chatResults._id);
-  //     // console.log("UserId: " + chatResults.userId);
-  //     console.log("Bericht: " + chatResults.bericht);
-  //     console.log("Datum: " + chatResults.datum);
-  //     console.log("Tijdstip: " + chatResults.tijd);
-  //     console.log("Precieze tijd: " + chatResults.tijdVolledig);
-  // });
-
-  // database legen
-  // await client.db("chatlog").collection("fullChatLog").deleteMany({});
 };
 
 const saveChat = async function (msgMetaData) {
