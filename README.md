@@ -1,5 +1,5 @@
 # Blok tech chat feature
-This project is part of a matching application that is soon to be completed. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express.
+This project is part of a matching application that will help gamers find each other. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express.
 
 ---
 ## Requirements (optimal)
@@ -22,7 +22,7 @@ Make sure to have `git` available in your PATH, `npm` might need it (You can fin
 - #### Other Operating Systems
   You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
 
-If the installation was successful, you should be able to run the following command.
+If the installation was successful, you should be able to run the following commands.
 
     $ node --version
 
@@ -37,7 +37,7 @@ If the installation was successful, you should be able to run the following comm
 
 ## Setting up .env
 ```
-DB_USERNAME=[youeDatabaseUsername]
+DB_USERNAME=[yourDatabaseUsername]
 DB_PASSWORD=[yourPassword]
 ```
 

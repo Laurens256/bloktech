@@ -1,6 +1,8 @@
+//bron: https://github.com/bradtraversy/chatcord/blob/master/utils/users.js
+
 const users = [];
 
-// Join user to chat
+// Zet users in array voor sidebar
 function userJoin(id, username, room) {
   const user = { id, username, room };
 
@@ -9,7 +11,7 @@ function userJoin(id, username, room) {
   return user;
 }
 
-// User leaves chat
+// Haalt user uit array voor sidebar
 function userLeave(id) {
   const index = users.findIndex(user => user.id === id);
 
@@ -18,12 +20,12 @@ function userLeave(id) {
   }
 }
 
-// Get current user
+// Vind eigen user
 function getCurrentUser(id) {
   return users.find(user => user.id === id);
 }
 
-// Get room users
+// Haalt users uit array op
 function getRoomUsers(room) {
   return (users.filter(user => user.room === room));
 }
