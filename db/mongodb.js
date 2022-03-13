@@ -1,9 +1,10 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.acfzh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.acfzh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&socketTimeoutMS=60000`;
 
 const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 
 const client = new MongoClient(uri);
 
@@ -28,6 +29,7 @@ const loadChat = async function (room, socket) {
   //   chatResults.forEach((chatResults, i) => {
   //     console.log();
   //     console.log(i + 1 + ". Naam: " + chatResults.naam);
+  //     console.log(i + 1 + ". Naam: " + chatResults._id);
   //     // console.log("UserId: " + chatResults.userId);
   //     console.log("Bericht: " + chatResults.bericht);
   //     console.log("Datum: " + chatResults.datum);
@@ -54,4 +56,20 @@ const saveChat = async function (msgMetaData) {
   }
 };
 
-module.exports = { loadChat, saveChat };
+const deleteChat = async function (room, messageId) {
+  // console.log(messageId);
+  try {
+    await client.connect();
+    await client
+      .db("chatlog")
+      .collection(room)
+      .deleteOne( {"_id": ObjectId(messageId)});
+    console.log("Bericht verwijderd met id: " + messageId);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+module.exports = { loadChat, saveChat, deleteChat };

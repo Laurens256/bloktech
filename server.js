@@ -1,6 +1,3 @@
-const dotenv = require("dotenv");
-dotenv.config();
-
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -8,18 +5,20 @@ const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-// global.io = new Server(server);
 
 // socket.io admin-ui
 const { instrument } = require("@socket.io/admin-ui");
 const cors = require("cors");
-// app.use(cors({ origin: "https://admin.socket.io/" }));
 app.use(cors({ origin: "*" }));
 instrument(io, { auth: false });
 
 const bodyParser = require("body-parser");
 
-const { loadChat, saveChat } = require("./db/mongodb.js");
+const {
+  loadChat,
+  saveChat,
+  deleteChat
+} = require("./db/mongodb.js");
 
 const { formatMessage } = require("./utils/io/messages.js");
 
@@ -30,29 +29,24 @@ const {
   getRoomUsers
 } = require("./utils/io/users");
 
+// map voor static files (stylesheet etc)
+const path = require("path");
+app.use(express.static(path.join(__dirname, "public")));
+
 const exphbs = require("express-handlebars");
 app.engine(
   "hbs",
-    exphbs.engine({
+  exphbs.engine({
     defaultLayout: "main",
     extname: ".hbs",
   })
 );
-
-// const authRoutes = require("./routes/auth");
-// const managerRoutes = require("./routes/manager");
-// const leadRoutes = require("./routes/lead");
-// const resourceRoutes = require("./routes/resource");
-
-
-// app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
-
 app.set("view engine", "hbs");
 
-app.get("/", (req, res) => {
-  res.render("form");
-});
+app.use("/", require("./routes/roomselect"));
+// app.use("/messages", require("./routes/chat"));
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/messages", (req, res) => {
   res.render("chat", {
@@ -64,14 +58,10 @@ app.post("/messages", (req, res) => {
   res.redirect("/messages?username=" + req.body.username+"&room="+req.body.room);
 });
 
-// map voor static files (stylesheet etc)
-const path = require("path");
-app.use(express.static(path.join(__dirname, "public")));
-
 
 
 io.on("connect", (socket) => {
-  socket.on("joinRoom", ({username, room}) => {
+  socket.on("joinRoom", ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
@@ -79,38 +69,41 @@ io.on("connect", (socket) => {
     loadChat(user.room, socket);
 
     socket.broadcast
-    .to(user.room)
-    .emit("systemMessage", formatMessage("Server", user.username+ " has joined the chat"));
+      .to(user.room)
+      .emit("systemMessage", formatMessage("Server", user.username + " has joined the chat"));
 
     io.to(user.room).emit("updateusers", getRoomUsers(user.room));
 
-  // Listen for chatMessage
-  socket.on("message", msg => {
-    const user = getCurrentUser(socket.id);
+    // Listen for chatMessage
+    socket.on("message", msg => {
+      const user = getCurrentUser(socket.id);
 
-    io.to(user.room).emit("message", formatMessage(user, msg));
+      io.to(user.room).emit("message", formatMessage(user, msg));
 
-    saveChat(formatMessage(user, msg));
-  });
+      saveChat(formatMessage(user, msg));
+    });
 
-  // Runs when client disconnects
-  socket.on("disconnect", () => {
-    const user = userLeave(socket.id);
-  
-    if (user) {
-      io.to(user.room).emit(
-        "systemMessage",
-        formatMessage("Server", user.username + " has left the chat")
-      );
-  
-      // Send users and room info
-      io.to(user.room).emit("updateusers", getRoomUsers(user.room));
-    }
-  });
+    socket.on("deleteMsg", (room, messageId) => {
+      io.to(user.room).emit("deleteMsgGlobal", messageId);
+      deleteChat(room, messageId);
+    })
+
+    // Runs when client disconnects
+    socket.on("disconnect", () => {
+      const user = userLeave(socket.id);
+
+      if (user) {
+        io.to(user.room).emit(
+          "systemMessage",
+          formatMessage("Server", user.username + " has left the chat")
+        );
+
+        // Send users and room info
+        io.to(user.room).emit("updateusers", getRoomUsers(user.room));
+      }
+    });
   });
 });
-
-
 
 
 
