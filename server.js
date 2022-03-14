@@ -79,15 +79,13 @@ io.on("connect", (socket) => {
 
     // Listen for chatMessage
     socket.on("message", msg => {
-      const getMsgId = async function () {
         const user = getCurrentUser(socket.id);
 
         const fullMsg = formatMessage(user, msg)
-        const fullMsgId = await saveChat(fullMsg);
 
-        io.to(user.room).emit("message", fullMsgId);
-      }
-      getMsgId(msg);
+        io.to(user.room).emit("message", fullMsg);
+
+        saveChat(fullMsg);
     });
 
     socket.on("deleteMsg", (room, messageId) => {

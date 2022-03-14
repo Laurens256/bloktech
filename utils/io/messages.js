@@ -1,4 +1,5 @@
 const { getAllDate } = require("./timeCheck.js");
+const uniqid = require("uniqid");
 
 function formatMessage(user, msg) {
   const allDate = getAllDate();
@@ -14,6 +15,7 @@ function formatMessage(user, msg) {
       allDate.hour +
       allDate.minute +
       allDate.second,
+    uniqid: uniqid(),
   };
 }
 

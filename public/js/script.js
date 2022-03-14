@@ -62,14 +62,14 @@ if ((window.location.href.indexOf("messages") > -1)) {
     naamDelete.textContent = "Verwijderd";
     berichtDelete.textContent = "Bericht wordt verwijderd...";
 
-    socket.emit("deleteMsg", room, liDelete.id, liDelete);
+    socket.emit("deleteMsg", room, liDelete.id);
   }
 
 
   //display berichten
   socket.on("message", function (msg) {
     const liMessage = document.createElement("li");
-    liMessage.setAttribute("id", msg._id);
+    liMessage.setAttribute("id", msg.uniqid);
     liMessage.innerHTML = "<div><strong>" + msg.naam + "</strong><small>" + msg.time + "</small></div><p>" + msg.bericht + `</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
     <g>
       <g>
@@ -121,8 +121,8 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
   //verwijder bericht globaal
   socket.on("deleteMsgGlobal", (messageId) => {
-    const test = document.getElementById(messageId);
-    test.remove();
+    const messageToBeRemoved = document.getElementById(messageId);
+    messageToBeRemoved.remove();
   })
 
 
