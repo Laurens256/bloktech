@@ -1,4 +1,5 @@
 # Blok tech chat feature
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)<br>
 This project is part of a matching application that will help gamers find each other. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express.
 
 ---
@@ -44,6 +45,9 @@ DB_PASSWORD=[yourPassword]
 
 ## Running the project
 To run the project you can either use `node server.js` or `nodemon server.js` where the latter is preferred for development purposes.
+
+## Wiki
+Want to read more about the project? Read the [wiki](https://github.com/Laurens256/bloktech/wiki)
 
 ## Sources
 - [Readme template](https://gist.github.com/Igormandello/57d57ee9a9f32a5414009cbe191db432)
