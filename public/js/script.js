@@ -3,20 +3,18 @@ const socket = io();
 const loginScreen = document.querySelector("#loginform");
 const loginSubmit = document.querySelector("#loginform input[type=submit]");
 
-const loadScreen = document.querySelector("#loadScreen");
-
-const messages = document.querySelector("#messages");
+const messages = document.querySelector(".chat main > ul");
 let deleteButtons = [];
 
-const messageForm = document.querySelector("#form");
-const messageInput = document.querySelector("#input");
+const messageForm = document.querySelector(".chat main form");
+const messageInput = document.querySelector(".chat main form input[type=text]");
 
 // const chatsList = document.querySelector("aside ul:first-of-type");
 const usersList = document.querySelector("aside ul:last-of-type");
 
 const roomsList = document.querySelectorAll("aside ul:first-of-type li a");
 
-const chatBackButton = document.querySelector("#chatbackbutton");
+const chatBackButton = document.querySelector(".chat main > div");
 const asideElement = document.querySelector("aside");
 
 if ((window.location.href.indexOf("messages") < 1)) {

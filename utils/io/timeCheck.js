@@ -1,21 +1,4 @@
-// const convertTime12to24 = () => {
-//   const datum = new Date();
-//   const timeHHMM = datum.toLocaleTimeString();
-//   const [time, modifier] = timeHHMM.split(" ");
-
-//   let [hours, minutes] = time.split(":");
-
-//   if (hours === "12") {
-//     hours = "00";
-//   }
-
-//   if (modifier === "PM") {
-//     hours = parseInt(hours, 10) + 12;
-//   }
-
-//   return hours + ":" + minutes;
-// };
-
+//maakt object met tijd van jaar tot seconde
 const getAllDate = () => {
     const datumTest = new Date();
     const fullDate = {
@@ -29,6 +12,7 @@ const getAllDate = () => {
     return fullDate;
 }
 
+//zorgt dat de tijd format altijd yyyy-mm-dd-uu-mm-ss is
 function timeCheck(n) {
   return n < 10 ? "0" + n : n;
 }

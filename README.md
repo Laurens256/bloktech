@@ -44,7 +44,7 @@ DB_PASSWORD=[yourPassword]
 
 
 ## Running the project
-To run the project you can either use `node server.js` or `nodemon server.js` where the latter is preferred for development purposes.
+To run the project you can either use `npm start` or `npm run devStart` where the latter is preferred for development purposes.
 
 ## Wiki
 Want to read more about the project? Read the [wiki](https://github.com/Laurens256/bloktech/wiki)

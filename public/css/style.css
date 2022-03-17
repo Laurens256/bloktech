@@ -13,23 +13,7 @@
     --formachtergrond: #D3D3D3;
 }
 
-#startscherm {
-    display: inline;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: var(--achtergrond);
-    /* z-index: 999; */
-    justify-content: center;
-}
-
-#startscherm.connected {
-    display: none;
-}
-
-#chatcontainer {
+.chat main {
     width: 70%;
     position: absolute;
     top: 0;
@@ -37,7 +21,7 @@
     right: 0;
 }
 
-aside {
+.chat aside {
     background: var(--achtergrond);
     overflow-x: hidden;
     width: 30%;
@@ -48,13 +32,13 @@ aside {
     z-index: 10;
 }
 
-aside ul:first-of-type {
+.chat aside ul:first-of-type {
     width: 100%;
     height: 50%;
     overflow-y: auto;
 }
 
-aside ul:first-of-type li {
+.chat aside ul:first-of-type li {
     display: inline-block;
     border-bottom: solid 1px grey;
     transition: all .15s;
@@ -63,7 +47,7 @@ aside ul:first-of-type li {
     text-align: center;
 }
 
-aside ul:first-of-type li a {
+.chat aside ul:first-of-type li a {
     padding: 2em 0;
     display: block;
     height: 1em;
@@ -71,23 +55,23 @@ aside ul:first-of-type li a {
     color: black;
 }
 
-aside ul:first-of-type li:hover,
-aside ul:first-of-type li:focus-within {
+.chat aside ul:first-of-type li:hover,
+.chat aside ul:first-of-type li:focus-within {
     background-color: #eee;
 }
 
-aside ul:first-of-type li span {
+.chat aside ul:first-of-type li span {
     display: block;
 }
 
-aside ul:last-of-type {
+.chat aside ul:last-of-type {
     width: 100%;
     height: calc(50% - 3px);
     overflow-y: auto;
     border-top: black 3px solid;
 }
 
-aside ul:last-of-type li {
+.chat aside ul:last-of-type li {
     display: flex;
     align-items: center;
     width: calc(100% - 2em);
@@ -96,18 +80,19 @@ aside ul:last-of-type li {
     padding: 1em;
 }
 
-#form {
+.chat main form {
     position: absolute;
     /* bottom: 0; */
     right: 0;
     background: var(--formachtergrond);
     height: 2.75em;
-    width: 98%;
+    /* width: 98%; */
+    width: calc(100% - 1em);
     padding: .5em;
     display: flex;
 }
 
-#input {
+.chat main form input[type=text] {
     border: none;
     padding: 0 1em;
     flex-grow: 1;
@@ -115,11 +100,11 @@ aside ul:last-of-type li {
     margin: .3em;
 }
 
-#input:focus { 
+.chat main form input[type=text]:focus { 
     border: darkgray 2px solid;
     outline: none;
 }
-#form > button { 
+.chat main form > button { 
     background: darkblue; 
     border: none;
     padding: 0 2em; 
@@ -129,12 +114,12 @@ aside ul:last-of-type li {
     color: var(--tekstalt); 
 }
 
-#form > button:hover {
+.chat main form > button:hover {
     transform: scale(1.03);
     cursor: pointer;
 }
 
-#messages {
+.chat main > ul {
     height: calc(100% - 7.75em - 1px);   /* som van header en form + padding + header border */
     width: calc(100% - 2em);
     padding: 0 1em;
@@ -145,7 +130,7 @@ aside ul:last-of-type li {
     overflow-x: hidden;
 }
 
-#messages > li {
+.chat main > ul li {
     background: white;
     align-self: start;
     position: relative;
@@ -156,12 +141,12 @@ aside ul:last-of-type li {
     border-radius: 3em;
 }
 
-#messages > li.yourmsg {
+.chat main > ul > li.yourmsg {
     align-self: end;
     background: lightblue;
 }
 
-#messages > li.servermsg {
+.chat main > ul > li.servermsg {
     align-self: center;
     background: white;
     border-color: red;
@@ -169,32 +154,32 @@ aside ul:last-of-type li {
     text-align: center;
 }
 
-#messages > li.servermsg div {
+.chat main > ul > li.servermsg div {
     justify-content: center;
 }
 
-#messages > li:first-of-type {
+.chat main > ul > li:first-of-type {
     margin-top: 1em;
 }
 
-#messages > li:last-of-type {
+.chat main > ul > li:last-of-type {
     margin-bottom: 1em;
 }
 
-#messages > li div {
+.chat main > ul > li div {
     display: flex;
     gap: .5em;
 }
 
-#messages > li div strong {
+.chat main > ul > li div strong {
     font-size: .8rem;
 }
 
-#messages > li div small {
+.chat main > ul > li div small {
     font-size: .7rem;
 }
 
-#messages > li svg {
+.chat main > ul > li svg {
     fill: black;
     display: none;
     position: absolute;
@@ -204,11 +189,11 @@ aside ul:last-of-type li {
     /* height: 1em; */
 }
 
-#messages > li.yourmsg:hover svg {
+.chat main > ul > li.yourmsg:hover svg {
     display: inline;
 }
 
-#messages > li.yourmsg input[type=text] {
+.chat main > ul > li.yourmsg input[type=text] {
     background: transparent;
     outline: none;
     border: none;
@@ -216,13 +201,16 @@ aside ul:last-of-type li {
     height: 2em;
 }
 
-#messages > li aside {
+.chat main > ul > li aside {
     display: none;
 }
 
 
 
-#messageheader {
+/*****************************
+header boven chat (chatnaam)
+*****************************/
+.chat main > div:first-of-type {
     height: 4em;
     background: var(--achtergrond);
     width: 100%;
@@ -231,13 +219,13 @@ aside ul:last-of-type li {
     border-bottom: 1px solid black;
 }
 
-#messageheader h1 {
+.chat main > div:first-of-type h2 {
     font-weight: normal;
     font-size: 1.5rem;
     margin-left: 1em;
 }
 
-#messageheader svg {
+.chat main > div:first-of-type svg {
     display: none;
 }
 
@@ -256,29 +244,29 @@ Login page
 mobile styles, media query   
 *****************************/
 @media only screen and (max-width: 768px) {
-    #chatcontainer {
+    .chat main {
         width: 100%;
         top: 0;
         bottom: 0;
     }
-    aside {
+    .chat aside {
         width: 0%;
         background: var(--achtergrond);
         transition: all .3s;
         border: none;
     }
-    aside.active {
+    .chat aside.active {
         width: 100%;
     }
-    #messages li {
+    .chat main > ul li {
         font-size: 1.1rem;
     }
 
-    #messageheader h1 {
+    .chat main > div:first-of-type h2 {
         margin-left: .5em;
     }
 
-    #messageheader svg {
+    .chat main > div:first-of-type svg {
         display: inline;
         width: 3em;
     }
