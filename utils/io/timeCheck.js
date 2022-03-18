@@ -1,4 +1,5 @@
 //maakt object met tijd van jaar tot seconde
+//KIJKEN NAAR GETHOURS, geeft een uur te weinig soms
 const getAllDate = () => {
     const datumTest = new Date();
     const fullDate = {
