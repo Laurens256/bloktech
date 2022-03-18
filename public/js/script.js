@@ -1,7 +1,10 @@
 const socket = io();
 
-const loginScreen = document.querySelector("#loginform");
-const loginSubmit = document.querySelector("#loginform input[type=submit]");
+// const rootElement = document.querySelector(":root");
+// let currentTheme;
+
+const loginScreen = document.querySelector(".login form");
+const loginSubmit = document.querySelector(".login form input[type=submit]");
 
 const messages = document.querySelector(".chat main > ul");
 let deleteButtons = [];
@@ -14,7 +17,7 @@ const usersList = document.querySelector("aside ul:last-of-type");
 
 const roomsList = document.querySelectorAll("aside ul:first-of-type li a");
 
-const chatBackButton = document.querySelector(".chat main > div");
+const chatBackButton = document.querySelector(".chat main > div svg");
 const asideElement = document.querySelector("aside");
 
 if ((window.location.href.indexOf("messages") < 1)) {
@@ -48,7 +51,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
 
   const changeRoom = (e) => {
-    window.location.href = "/messages?username="+username+"&room="+e.target.id;
+    window.location.href = "/messages?username=" + username + "&room=" + e.target.id;
   }
 
 
@@ -57,8 +60,8 @@ if ((window.location.href.indexOf("messages") > -1)) {
     const naamDelete = liDelete.querySelector("div strong");
     const berichtDelete = liDelete.querySelector("p");
 
-    naamDelete.textContent = "Verwijderd";
-    berichtDelete.textContent = "Bericht wordt verwijderd...";
+    naamDelete.textContent = "[Removed]";
+    berichtDelete.textContent = "Message is being deleted...";
 
     socket.emit("deleteMsg", room, liDelete.id);
   }
@@ -83,7 +86,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
     messages.appendChild(liMessage);
     messages.scrollTo(0, messages.scrollHeight);
-    deleteButtons = document.querySelectorAll("#messages li.yourmsg svg");
+    deleteButtons = document.querySelectorAll(".chat main ul li.yourmsg svg");
 
     for (let i = 0; i < deleteButtons.length; i++) {
       deleteButtons[i].addEventListener("click", deleteMsg);
@@ -140,3 +143,29 @@ if ((window.location.href.indexOf("messages") > -1)) {
   chatBackButton.addEventListener("click", mobileAside);
 
 }
+
+// function toggleDarkMode(event) {
+//   //pagina load geeft als event undefined, alleen dan kijken naar localstorage/systeemvoorkeur
+//   if (event == undefined) {
+//     if (window.matchMedia("(prefers-color-scheme: dark)").matches && currentTheme == null || currentTheme == "dark") {
+//       rootElement.classList.add("darkmode");
+//     }
+//     return;
+//   }
+//   if (event.target.tagName == "BUTTON" || event.target.tagName == "SPAN") {
+//     rootElement.classList.toggle("lightmode");
+
+//   } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+//     rootElement.classList.add("dark");
+//   } else {
+//     rootElement.classList.remove("darkmode");
+//   }
+
+//   if (rootElement.classList.contains("darkmode")) {
+//     localStorage.setItem("currentTheme", "dark");
+//   } else {
+//     localStorage.setItem("currentTheme", "light");
+//   }
+// }
+
+// toggleDarkMode();
