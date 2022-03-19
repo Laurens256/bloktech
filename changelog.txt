@@ -14,3 +14,4 @@
 3.2.0: Database connection wordt 1x gemaakt bij startup van de applicatie zodat hij niet telkens geopend en gedicht wordt (kijk mongoConnect.js). Classes en id's weggehaald uit html.
 3.2.1: Styles aangepast + donker thema toegevoegd met css media query
 3.2.2: Kleine style aanpassingen + sidebar height fix voor kleinere schermen pc
+test
