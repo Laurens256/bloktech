@@ -18,6 +18,7 @@ const getDB = async () => {
         const client = await MongoClient.connect(uri);
         db = client.db("chatlog");
     } catch (err) {
+        console.log("jksafdhjshfgsdhjfgehjfhewjfhwefhwefuwefhewfhweyufhweufwebufwehbufwehbu");
         console.log(err);
     }
     return db;

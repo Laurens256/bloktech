@@ -1,8 +1,5 @@
 const socket = io();
 
-// const rootElement = document.querySelector(":root");
-// let currentTheme;
-
 const loginScreen = document.querySelector(".login form");
 const loginSubmit = document.querySelector(".login form input[type=submit]");
 
@@ -27,14 +24,14 @@ if ((window.location.href.indexOf("messages") < 1)) {
 
 
 if ((window.location.href.indexOf("messages") > -1)) {
-
+//haalt username en room op uit url
   const { username, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
 
   socket.emit("joinRoom", { username, room });
 
-  // regelt input van form(tekstbox)
+  // regelt input van form(tekstbox voor msg)
   messageForm.addEventListener("submit", function (e) {
     e.preventDefault();
     if (messageInput.value) {
@@ -50,11 +47,13 @@ if ((window.location.href.indexOf("messages") > -1)) {
   }
 
 
+  //verander room mbv sidebar
   const changeRoom = (e) => {
-    window.location.href = "/messages?username=" + username + "&room=" + e.target.id;
+    window.location.href = `/messages?username=${username}&room=${e.target.id}`;
   }
 
 
+  //haalt id op van msg die verwijderd moet worden en verwijderd deze lokaal
   const deleteMsg = (e) => {
     const liDelete = e.currentTarget.parentNode;
     const naamDelete = liDelete.querySelector("div strong");
@@ -67,11 +66,12 @@ if ((window.location.href.indexOf("messages") > -1)) {
   }
 
 
-  //display berichten
+  //berichten output
   socket.on("message", function (msg) {
     const liMessage = document.createElement("li");
     liMessage.setAttribute("id", msg.uniqid);
-    liMessage.innerHTML = "<div><strong>" + msg.naam + "</strong><small>" + msg.time + "</small></div><p>" + msg.bericht + `</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+    liMessage.innerHTML = `<div><strong>${msg.naam}</strong><small>${msg.time}</small></div><p>${msg.bericht}
+    </p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-label="delete message">
     <g>
       <g>
       <path d="M 76.777 2.881 H 57.333 V 2.412 C 57.333 1.08 56.253 0 54.921 0 H 35.079 c -1.332 0 -2.412 1.08 -2.412 2.412 v 0.469 H 13.223 c -1.332 0 -2.412 1.08 -2.412 2.412 v 9.526 c 0 1.332 1.08 2.412 2.412 2.412 h 63.554 c 1.332 0 2.412 -1.08 2.412 -2.412 V 5.293 C 79.189 3.961 78.109 2.881 76.777 2.881 z"/>
@@ -99,7 +99,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
   socket.on("systemMessage", function (msg) {
     const liMessage = document.createElement("li");
     liMessage.classList.add("servermsg");
-    liMessage.innerHTML = "<div><strong>" + msg.naam + "</strong><small>" + msg.time + "</small></div>" + msg.bericht;
+    liMessage.innerHTML = `<div><strong>${msg.naam}</strong><small>${msg.time}</small></div>${msg.bericht}`;
     messages.appendChild(liMessage);
     messages.scrollTo(0, messages.scrollHeight);
   });
@@ -143,29 +143,3 @@ if ((window.location.href.indexOf("messages") > -1)) {
   chatBackButton.addEventListener("click", mobileAside);
 
 }
-
-// function toggleDarkMode(event) {
-//   //pagina load geeft als event undefined, alleen dan kijken naar localstorage/systeemvoorkeur
-//   if (event == undefined) {
-//     if (window.matchMedia("(prefers-color-scheme: dark)").matches && currentTheme == null || currentTheme == "dark") {
-//       rootElement.classList.add("darkmode");
-//     }
-//     return;
-//   }
-//   if (event.target.tagName == "BUTTON" || event.target.tagName == "SPAN") {
-//     rootElement.classList.toggle("lightmode");
-
-//   } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-//     rootElement.classList.add("dark");
-//   } else {
-//     rootElement.classList.remove("darkmode");
-//   }
-
-//   if (rootElement.classList.contains("darkmode")) {
-//     localStorage.setItem("currentTheme", "dark");
-//   } else {
-//     localStorage.setItem("currentTheme", "light");
-//   }
-// }
-
-// toggleDarkMode();

@@ -1,7 +1,8 @@
 <div class="login">
   <form action="/messages" method="POST">
+  <h2>Chat</h2>
     <label for="username">Naam
-      <input name="username" type="text" placeholder="username" autocomplete="off" required>
+      <input name="username" type="text" placeholder="username" autocomplete="off" id="username" required>
     </label>
 
     <label for="Room">Room
@@ -10,7 +11,7 @@
 	      c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393
       	s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"/>
       </svg>
-      <select name="room">
+      <select name="room" id="Room">
         <option value="valorant">Valorant</option>
         <option value="minecraft">Minecraft</option>
         <option value="pvz">Plants vs Zombies</option>

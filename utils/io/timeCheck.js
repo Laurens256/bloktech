@@ -1,14 +1,14 @@
 //maakt object met tijd van jaar tot seconde
 //KIJKEN NAAR GETHOURS, geeft een uur te weinig soms
 const getAllDate = () => {
-    const datumTest = new Date();
+    const date = new Date();
     const fullDate = {
-        year: timeCheck(datumTest.getFullYear()),
-        month: timeCheck(datumTest.getMonth() + 1),
-        day: timeCheck(datumTest.getDate()),
-        hour: timeCheck(datumTest.getHours()),
-        minute: timeCheck(datumTest.getMinutes()),
-        second: timeCheck(datumTest.getSeconds())
+        year: date.getFullYear().toString(),
+        month: timeCheck(date.getMonth() + 1).toString(),
+        day: timeCheck(date.getDate()).toString(),
+        hour: timeCheck(date.getHours()).toString(),
+        minute: timeCheck(date.getMinutes()).toString(),
+        second: timeCheck(date.getSeconds()).toString()
     }
     return fullDate;
 }

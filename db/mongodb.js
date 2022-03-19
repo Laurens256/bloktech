@@ -27,7 +27,7 @@ const saveChat = async function (msgMetaData) {
   try {
       db.collection(msgMetaData.room)
       .insertOne(msgMetaData);
-    console.log("Bericht opgeslagen met id: " + msgMetaData.uniqid);
+    console.log(`Bericht opgeslagen met id: ${msgMetaData.uniqid}`);
   } catch (e) {
     console.error(e);
   }
@@ -39,7 +39,7 @@ const deleteChat = async function (room, messageId) {
   try {
       db.collection(room)
       .deleteOne( {"uniqid": messageId});
-    console.log("Bericht verwijderd met id: " + messageId);
+    console.log(`Bericht verwijderd met id: ${messageId}`);
   } catch (e) {
     console.error(e);
   }

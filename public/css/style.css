@@ -82,12 +82,15 @@ chat (messages)
     width: 80%;
     border: solid 1px var(--tekst);
     border-radius: 3em;
+    border-bottom-left-radius: 0;
     color: var(--tekst);
 }
 
 .chat main > ul > li.yourmsg {
     align-self: end;
     background: var(--yourmsg);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 3em;
 }
 
 .chat main > ul > li.servermsg {
@@ -125,16 +128,16 @@ chat (messages)
 }
 
 .chat main > ul > li svg {
-    fill: black;
+    fill: var(--tekst);
     display: none;
     position: absolute;
     right: -1.1em;
     top: .5em;
     width: 3em;
-    /* height: 1em; */
 }
 
-.chat main > ul > li.yourmsg:hover svg {
+.chat main > ul > li.yourmsg:hover svg,
+.chat main > ul > li.yourmsg:focus svg {
     display: inline;
 }
 
@@ -158,15 +161,38 @@ chat (sidebar)
     color: var(--tekst);
     font-size: 1.2rem;
     max-height: 2em;
-    padding: 1.1em;
+    padding: 1em;
     border-bottom: var(--accentkleur) 2px solid;
+    border-top: var(--accentkleur) 2px solid;
 }
 
-.chat aside ul:first-of-type {
+.chat aside ul {
     width: 100%;
-    height: 50%;
     overflow-y: auto;
+    height: calc(50% - 4.29em);
 }
+
+.chat aside ul::-webkit-scrollbar {
+    width: .8em;
+}
+  
+/* Track */
+.chat aside ul::-webkit-scrollbar-track {
+    background: var(--secundair);
+    border-radius: 100em;
+    box-shadow: 0 0 5px var(--tekst);
+}
+  
+/* Handle */
+.chat aside ul::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 100em;
+}
+  
+/* Handle on hover */
+.chat aside ul::-webkit-scrollbar-thumb:hover {
+    background: var(--tertiair);
+} 
 
 .chat aside ul:first-of-type li {
     display: inline-block;
@@ -198,12 +224,6 @@ chat (sidebar)
 
 .chat aside ul:first-of-type li span {
     display: block;
-}
-
-.chat aside ul:last-of-type {
-    width: 100%;
-    height: calc(50% - 3px);
-    overflow-y: auto;
 }
 
 .chat aside ul:last-of-type li {
@@ -251,9 +271,11 @@ chat (sidebar)
     color: var(--wit); 
 }
 
-.chat main form > button:hover {
+.chat main form > button:hover,
+.chat main form > button:focus {
     transform: scale(1.03);
     cursor: pointer;
+    border: solid 1px var(--tekst);
 }
 
 
@@ -304,6 +326,12 @@ login
     padding: 3em;
     border-radius: 1em;
     gap: 2em;
+}
+
+.login form h2 {
+    font-weight: normal;
+    align-self: center;
+    font-size: 1.8rem;
 }
 
 .login form label {

@@ -64,8 +64,9 @@ app.get("/messages", (req, res) => {
 });
 
 app.post("/messages", (req, res) => {
-  res.redirect("/messages?username=" + req.body.username+"&room="+req.body.room);
+  res.redirect(`/messages?username=${req.body.username}&room=${req.body.room}`);
 });
+
 
 
 io.on("connect", (socket) => {
@@ -80,7 +81,7 @@ io.on("connect", (socket) => {
 
     socket.broadcast
       .to(user.room)
-      .emit("systemMessage", formatMessage("Server", user.username + " has joined the chat"));
+      .emit("systemMessage", formatMessage("Server", `${user.username} has joined the chat`));
 
     //update users in sidebar
     io.to(user.room).emit("updateusers", getRoomUsers(user.room));
@@ -112,7 +113,7 @@ io.on("connect", (socket) => {
       if (user) {
         io.to(user.room).emit(
           "systemMessage",
-          formatMessage("Server", user.username + " has left the chat")
+          formatMessage("Server", `${user.username} has left the chat`)
         );
 
         io.to(user.room).emit("updateusers", getRoomUsers(user.room));
@@ -125,7 +126,7 @@ io.on("connect", (socket) => {
 const startServer = async () => {
   await mongoConnect.getDB();
   server.listen(port, "0.0.0.0", () => {
-    console.log("listening on: *" + port);
+    console.log(`listening on: *${port}`);
   });
 }
 
