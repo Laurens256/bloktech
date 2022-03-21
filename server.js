@@ -12,8 +12,6 @@ const cors = require("cors");
 app.use(cors({ origin: "*" }));
 instrument(io, { auth: false });
 
-const bodyParser = require("body-parser");
-
 // database functions
 const {
   loadChat,
@@ -48,19 +46,7 @@ app.engine(
 app.set("view engine", "hbs");
 
 app.use("/", require("./routes/roomselect"));
-// app.use("/messages", require("./routes/chat"));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/messages", (req, res) => {
-  res.render("chat", {
-    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1)
-  });
-});
-
-app.post("/messages", (req, res) => {
-  res.redirect(`/messages?username=${req.body.username}&room=${req.body.room}`);
-});
+app.use("/messages", require("./routes/chat"));
 
 
 
