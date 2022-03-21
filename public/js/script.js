@@ -1,6 +1,5 @@
 const socket = io();
 
-const loginScreen = document.querySelector(".login form");
 const loginSubmit = document.querySelector(".login form input[type=submit]");
 
 const messages = document.querySelector(".chat main > ul");
@@ -24,9 +23,9 @@ if ((window.location.href.indexOf("messages") < 1)) {
 
 
 if ((window.location.href.indexOf("messages") > -1)) {
-//haalt username en room op uit url
+// haalt username en room op uit url
   const { username, room } = Qs.parse(location.search, {
-    ignoreQueryPrefix: true,
+    ignoreQueryPrefix: true
   });
 
   socket.emit("joinRoom", { username, room });
@@ -41,19 +40,19 @@ if ((window.location.href.indexOf("messages") > -1)) {
   });
 
 
-  //mobile aside (chatlijst) tonen
-  function mobileAside() {
+  // mobile aside (chatlijst) tonen
+  function mobileAside () {
     asideElement.classList.add("active");
   }
 
 
-  //verander room mbv sidebar
+  // verander room mbv sidebar
   const changeRoom = (e) => {
     window.location.href = `/messages?username=${username}&room=${e.target.id}`;
-  }
+  };
 
 
-  //haalt id op van msg die verwijderd moet worden en verwijderd deze lokaal
+  // haalt id op van msg die verwijderd moet worden en verwijderd deze lokaal
   const deleteMsg = (e) => {
     const liDelete = e.currentTarget.parentNode;
     const naamDelete = liDelete.querySelector("div strong");
@@ -63,10 +62,10 @@ if ((window.location.href.indexOf("messages") > -1)) {
     berichtDelete.textContent = "Message is being deleted...";
 
     socket.emit("deleteMsg", room, liDelete.id);
-  }
+  };
 
 
-  //berichten output
+  // berichten output
   socket.on("message", function (msg) {
     const liMessage = document.createElement("li");
     liMessage.setAttribute("id", msg.uniqid);
@@ -80,7 +79,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
     </g>
     </svg>`;
 
-    if (msg.naam == username) {
+    if (msg.naam === username) {
       liMessage.classList.add("yourmsg");
     };
 
@@ -95,7 +94,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
 
 
 
-  //display server berichten
+  // display server berichten
   socket.on("systemMessage", function (msg) {
     const liMessage = document.createElement("li");
     liMessage.classList.add("servermsg");
@@ -104,7 +103,7 @@ if ((window.location.href.indexOf("messages") > -1)) {
     messages.scrollTo(0, messages.scrollHeight);
   });
 
-  //display lijst met users in room
+  // display lijst met users in room
   socket.on("updateusers", function (users) {
     usersList.innerHTML = "";
     users.forEach((user) => {
@@ -112,19 +111,19 @@ if ((window.location.href.indexOf("messages") > -1)) {
       liUser.innerHTML = user.username;
       usersList.appendChild(liUser);
       usersList.scrollTo(0, usersList.scrollHeight);
-    })
+    });
   });
 
-  //check of gebruiker connected blijft
+  // check of gebruiker connected blijft
   socket.on("disconnect", () => {
     messageInput.setAttribute("placeholder", "Je bent niet verbonden");
   });
 
-  //verwijder bericht globaal
+  // verwijder bericht globaal
   socket.on("deleteMsgGlobal", (messageId) => {
     const messageToBeRemoved = document.getElementById(messageId);
     messageToBeRemoved.remove();
-  })
+  });
 
 
   // document.addEventListener("keydown", e => {
@@ -141,5 +140,4 @@ if ((window.location.href.indexOf("messages") > -1)) {
   }
 
   chatBackButton.addEventListener("click", mobileAside);
-
 }

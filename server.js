@@ -14,21 +14,17 @@ instrument(io, { auth: false });
 
 const bodyParser = require("body-parser");
 
-//database functions
+// database functions
 const {
   loadChat,
   saveChat,
-  deleteChat,
+  deleteChat
 } = require("./db/mongodb.js");
 const mongoConnect = require("./db/mongoConnect");
-  // //verbind met mongodb database
-  // mongoConnect.connectToServer(function(err) {
-  //   if (err) console.log(err);
-  // });
 
 const { formatMessage } = require("./utils/io/messages.js");
 
-//houdt users in room bij
+// houdt users in room bij
 const {
   userJoin,
   getCurrentUser,
@@ -41,12 +37,11 @@ const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 
 const exphbs = require("express-handlebars");
-const { start } = require("repl");
 app.engine(
   "hbs",
   exphbs.engine({
     defaultLayout: "main",
-    extname: ".hbs",
+    extname: ".hbs"
   })
 );
 
@@ -59,7 +54,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/messages", (req, res) => {
   res.render("chat", {
-    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1),
+    groepsnaam: req.query.room.charAt(0).toUpperCase() + req.query.room.slice(1)
   });
 });
 
@@ -71,45 +66,45 @@ app.post("/messages", (req, res) => {
 
 io.on("connect", (socket) => {
   socket.on("joinRoom", ({ username, room }) => {
-    //wordt uitgevoerd wanneer gebruiker room joined, user object wordt in users array gezet voor sidebar info (utils/users.js)
+    // wordt uitgevoerd wanneer gebruiker room joined, user object wordt in users array gezet voor sidebar info (utils/users.js)
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
 
-    //haal chat op uit database
+    // haal chat op uit database
     loadChat(user.room, socket);
 
     socket.broadcast
       .to(user.room)
       .emit("systemMessage", formatMessage("Server", `${user.username} has joined the chat`));
 
-    //update users in sidebar
+    // update users in sidebar
     io.to(user.room).emit("updateusers", getRoomUsers(user.room));
 
     socket.on("message", msg => {
-      //chat message van user
-        const user = getCurrentUser(socket.id);
+      // chat message van user
+      const user = getCurrentUser(socket.id);
 
-        //voeg metadata aan message object toe (tijd, id etc.)
-        const fullMsg = formatMessage(user, msg)
+      // voeg metadata aan message object toe (tijd, id etc.)
+      const fullMsg = formatMessage(user, msg);
 
-        io.to(user.room).emit("message", fullMsg);
+      io.to(user.room).emit("message", fullMsg);
 
-        //sla message object op in database
-        saveChat(fullMsg);
+      // sla message object op in database
+      saveChat(fullMsg);
     });
 
     socket.on("deleteMsg", (room, messageId) => {
-      //verwijder message globaal, zowel in room als database
+      // verwijder message globaal, zowel in room als database
       deleteChat(room, messageId);
       io.to(user.room).emit("deleteMsgGlobal", messageId);
-    })
+    });
 
     socket.on("disconnect", () => {
-      //update sidebar en emit "has left the chat" msg
+      // update sidebar en emit "has left the chat" msg
       const user = userLeave(socket.id);
 
-      //emit message als er nog users in room zijn
+      // emit message als er nog users in room zijn
       if (user) {
         io.to(user.room).emit(
           "systemMessage",
@@ -122,13 +117,13 @@ io.on("connect", (socket) => {
   });
 });
 
-//verbind met mongodb database en start server
+// verbind met mongodb database en start server
 const startServer = async () => {
   await mongoConnect.getDB();
   server.listen(port, "0.0.0.0", () => {
     console.log(`listening on: *${port}`);
   });
-}
+};
 
 startServer();
 
