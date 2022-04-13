@@ -1,6 +1,6 @@
 # Blok tech chat feature
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)<br>
-This project is part of a matching application that will help gamers find each other. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express.
+This project is part of a matching application that will help gamers find each other. The part of matching application I'm making is a chat feature. To create this feature, I'm using the Socket.io module for Express. Using this module, users can send messages to chat rooms made specifically for video games. There are premade rooms for ganmes such as Valorant or Minecrft but users can create also create their own rooms to send messages in. All sent messages are saved and loaded when you join a room so you can join in on the conversation immediately. Want to know more? Read the [wiki](https://github.com/Laurens256/bloktech/wiki).
 
 ---
 ## Requirements (optimal)
